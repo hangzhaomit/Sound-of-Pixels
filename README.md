@@ -37,3 +37,15 @@ The code is developed under the following configurations.
 ```bash
 ./scripts/eval_MUSIC.sh
 ```
+
+## Reference
+If you use the code or dataset from the project, please cite:
+```bibtex
+    @InProceedings{Zhao_2018_ECCV,
+        author = {Zhao, Hang and Gan, Chuang and Rouditchenko, Andrew and Vondrick, Carl and McDermott, Josh and Torralba, Antonio},
+        title = {The Sound of Pixels},
+        booktitle = {The European Conference on Computer Vision (ECCV)},
+        month = {September},
+        year = {2018}
+    }
+```
