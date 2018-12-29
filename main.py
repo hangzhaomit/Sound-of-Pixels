@@ -17,7 +17,7 @@ from dataset import MUSICSpectrogramMultiple
 from models import ModelBuilder, activate
 from utils import AverageMeter, \
     recover_rgb, magnitude2heatmap,\
-    istft_reconstruction, meshgrid, \
+    istft_reconstruction, warpgrid, \
     combine_video_audio, save_video, makedirs
 from viz.plot_html import HTMLVisualizer
 from viz.plot_figures import plot_figures
@@ -43,7 +43,7 @@ class NetWrapper(torch.nn.Module):
         # 0.0 warp the spectrogram
         if args.log_freq:
             grid_warp = torch.from_numpy(
-                meshgrid(B, 256, T, warp=True)).to(args.device)
+                warpgrid(B, 256, T, warp=True)).to(args.device)
             mag_mix = F.grid_sample(mag_mix, grid_warp)
             for n in range(N):
                 mags[n] = F.grid_sample(mags[n], grid_warp)
@@ -115,7 +115,7 @@ def calc_metrics(batch_data, outputs, args):
     for n in range(N):
         if args.log_freq:
             grid_unwarp = torch.from_numpy(
-                meshgrid(B, args.stft_frame//2+1, pred_masks_[0].size(3), warp=False)).to(args.device)
+                warpgrid(B, args.stft_frame//2+1, pred_masks_[0].size(3), warp=False)).to(args.device)
             pred_masks_linear[n] = F.grid_sample(pred_masks_[n], grid_unwarp)
         else:
             pred_masks_linear[n] = pred_masks_[n]
@@ -191,7 +191,7 @@ def output_visuals(vis_rows, batch_data, outputs, args):
     for n in range(N):
         if args.log_freq:
             grid_unwarp = torch.from_numpy(
-                meshgrid(B, args.stft_frame//2+1, gt_masks_[0].size(3), warp=False)).to(args.device)
+                warpgrid(B, args.stft_frame//2+1, gt_masks_[0].size(3), warp=False)).to(args.device)
             pred_masks_linear[n] = F.grid_sample(pred_masks_[n], grid_unwarp)
             gt_masks_linear[n] = F.grid_sample(gt_masks_[n], grid_unwarp)
         else:
