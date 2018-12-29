@@ -1,0 +1,7 @@
+*.pyc
+*.log
+
+ckpt*/
+launch/
+data/
+prepro/
