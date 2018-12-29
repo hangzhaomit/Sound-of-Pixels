@@ -48,11 +48,9 @@ class ArgParser(object):
 
         # Path related arguments
         parser.add_argument('--root_audio',
-                            default='/data/vision/torralba/scratch2/'
-                                    'hangzhao/sound/MUSIC')
+                            default='./data/MUSIC')
         parser.add_argument('--root_frame',
-                            default='/data/vision/torralba/scratch2/'
-                                    'hangzhao/sound/MUSIC')
+                            default='./data/MUSIC')
 
         # Data related arguments
         parser.add_argument('--num_gpus', default=1, type=int,
