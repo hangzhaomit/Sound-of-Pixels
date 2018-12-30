@@ -3,7 +3,7 @@ Codebase for ECCV18 "The Sound of Pixels".
 
 *This repository is under construction.
 
-<img src="./teaser_abc.png"/>
+<img src="./teaser.png"/>
 
 ## Environment
 The code is developed under the following configurations.
