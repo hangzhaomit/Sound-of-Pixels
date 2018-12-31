@@ -7,20 +7,19 @@ import time
 import torch
 import torch.nn.functional as F
 import numpy as np
-import scipy.io.wavfile
+import scipy.io.wavfile as wavfile
 from scipy.misc import imsave
 from mir_eval.separation import bss_eval_sources
 
 # Our libs
 from arguments import ArgParser
-from dataset import MUSICSpectrogramMultiple
+from dataset import MUSICMixDataset
 from models import ModelBuilder, activate
 from utils import AverageMeter, \
     recover_rgb, magnitude2heatmap,\
     istft_reconstruction, warpgrid, \
     combine_video_audio, save_video, makedirs
-from viz.plot_html import HTMLVisualizer
-from viz.plot_figures import plot_figures
+from viz import plot_loss_metrics, HTMLVisualizer
 
 
 # Network wrapper, defines forward pass
@@ -234,7 +233,7 @@ def output_visuals(vis_rows, batch_data, outputs, args):
         filename_weight = os.path.join(prefix, 'weight.jpg')
         imsave(os.path.join(args.vis, filename_mixmag), mix_amp[::-1, :, :])
         imsave(os.path.join(args.vis, filename_weight), weight[::-1, :])
-        scipy.io.wavfile.write(os.path.join(args.vis, filename_mixwav), args.audRate, mix_wav)
+        wavfile.write(os.path.join(args.vis, filename_mixwav), args.audRate, mix_wav)
         row_elements += [{'text': prefix}, {'image': filename_mixmag, 'audio': filename_mixwav}]
 
         # save each component
@@ -259,14 +258,14 @@ def output_visuals(vis_rows, batch_data, outputs, args):
             filename_predmag = os.path.join(prefix, 'predamp{}.jpg'.format(n+1))
             gt_mag = magnitude2heatmap(gt_mag)
             pred_mag = magnitude2heatmap(pred_mag)
-            imsave(os.path.join(args.vis, filename_gtmag), gt_mag)
-            imsave(os.path.join(args.vis, filename_predmag), pred_mag)
+            imsave(os.path.join(args.vis, filename_gtmag), gt_mag[::-1, :, :])
+            imsave(os.path.join(args.vis, filename_predmag), pred_mag[::-1, :, :])
 
             # output audio
             filename_gtwav = os.path.join(prefix, 'gt{}.wav'.format(n+1))
             filename_predwav = os.path.join(prefix, 'pred{}.wav'.format(n+1))
-            scipy.io.wavfile.write(os.path.join(args.vis, filename_gtwav), args.audRate, gt_wav)
-            scipy.io.wavfile.write(os.path.join(args.vis, filename_predwav), args.audRate, preds_wav[n])
+            wavfile.write(os.path.join(args.vis, filename_gtwav), args.audRate, gt_wav)
+            wavfile.write(os.path.join(args.vis, filename_predwav), args.audRate, preds_wav[n])
 
             # output video
             frames_tensor = [recover_rgb(frames[n][j, :, t]) for t in range(args.num_frames)]
@@ -361,7 +360,7 @@ def evaluate(netWrapper, loader, history, epoch, args):
     # Plot figure
     if epoch > 0:
         print('Plotting figures...')
-        plot_figures(args.ckpt, history)
+        plot_loss_metrics(args.ckpt, history)
 
 
 # train one epoch
@@ -471,9 +470,9 @@ def main(args):
     crit = builder.build_criterion(arch=args.loss)
 
     # Dataset and Loader
-    dataset_train = MUSICSpectrogramMultiple(
+    dataset_train = MUSICMixDataset(
         args.list_train, args, split='train')
-    dataset_val = MUSICSpectrogramMultiple(
+    dataset_val = MUSICMixDataset(
         args.list_val, args, max_sample=args.num_val, split='val')
 
     loader_train = torch.utils.data.DataLoader(
@@ -504,7 +503,7 @@ def main(args):
         'train': {'epoch': [], 'err': []},
         'val': {'epoch': [], 'err': [], 'sdr': [], 'sir': [], 'sar': []}}
 
-    # Initial eval
+    # Eval mode
     evaluate(netWrapper, loader_val, history, 0, args)
     if args.mode == 'eval':
         print('Evaluation Done!')

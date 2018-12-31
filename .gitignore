@@ -1,7 +1,5 @@
 *.pyc
 *.log
+__pycache__
 
-ckpt*/
-launch/
-data/
-prepro/
+ckpt/

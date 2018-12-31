@@ -5,7 +5,7 @@ class ArgParser(object):
     def __init__(self):
         parser = argparse.ArgumentParser()
         # Model related arguments
-        parser.add_argument('--id', default='Mask',
+        parser.add_argument('--id', default='',
                             help="a name for identifying the model")
         parser.add_argument('--num_mix', default=2, type=int,
                             help="number of sounds to mix")
@@ -45,12 +45,6 @@ class ArgParser(object):
                             help="weighted loss")
         parser.add_argument('--log_freq', default=1, type=int,
                             help="log frequency scale")
-
-        # Path related arguments
-        parser.add_argument('--root_audio',
-                            default='./data/MUSIC')
-        parser.add_argument('--root_frame',
-                            default='./data/MUSIC')
 
         # Data related arguments
         parser.add_argument('--num_gpus', default=1, type=int,
@@ -96,10 +90,10 @@ class ArgParser(object):
         parser.add_argument('--mode', default='train',
                             help="train/eval")
         parser.add_argument('--list_train',
-                            default='data/MUSIC21_train.csv')
+                            default='data/train.csv')
         parser.add_argument('--list_val',
-                            default='data/MUSIC21_val.csv')
-        parser.add_argument('--dup_trainset', default=1, type=int,
+                            default='data/val.csv')
+        parser.add_argument('--dup_trainset', default=100, type=int,
                             help='duplicate so that one epoch has more iters')
 
         # optimization related arguments

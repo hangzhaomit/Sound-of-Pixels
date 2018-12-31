@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from .stft import STFT
 
 
 class InnerProd(nn.Module):
