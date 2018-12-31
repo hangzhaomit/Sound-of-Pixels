@@ -1,7 +1,7 @@
 # Sound-of-Pixels
 Codebase for ECCV18 "The Sound of Pixels".
 
-*This repository is under construction.
+*This repository is under construction, but the core parts are already there.
 
 <img src="./teaser.png"/>
 
@@ -17,13 +17,44 @@ The code is developed under the following configurations.
     
     b. Download videos.
 
-2. Preprocess videos. 
+2. Preprocess videos. You can do it in your own way as long as the index files are similar.
 
-    a. Extract frames from videos.
-  
-    b. Extract waveforms from videos.
+    a. Extract frames at 8fps and waveforms at 11025Hz from videos. We have following directory structure:
+    ```
+    data
+    ├── audio
+    |   ├── acoustic_guitar
+    │   |   ├── M3dekVSwNjY.mp3
+    │   |   ├── ...
+    │   ├── trumpet
+    │   |   ├── STKXyBGSGyE.mp3
+    │   |   ├── ...
+    │   ├── ...
+    |
+    └── frames
+    |   ├── acoustic_guitar
+    │   |   ├── M3dekVSwNjY.mp4
+    │   |   |   ├── 000001.jpg
+    │   |   |   ├── ...
+    │   |   ├── ...
+    │   ├── trumpet
+    │   |   ├── STKXyBGSGyE.mp4
+    │   |   |   ├── 000001.jpg
+    │   |   |   ├── ...
+    │   |   ├── ...
+    │   ├── ...
+    ```
 
-    c. Make training/validation index files.
+    b. Make training/validation index files by running:
+    ```
+    python scripts/create_index_files.py
+    ```
+    It will create index files ```train.csv```/```val.csv``` with the following format:
+    ```
+    ./data/audio/acoustic_guitar/M3dekVSwNjY.mp3,./data/frames/acoustic_guitar/M3dekVSwNjY.mp4,1580
+    ./data/audio/trumpet/STKXyBGSGyE.mp3,./data/frames/trumpet/STKXyBGSGyE.mp4,493
+    ```
+    For each row, it stores the information: ```AUDIO_PATH,FRAMES_PATH,NUMBER_FRAMES```
 
 3. Train the default model.
 ```bash
