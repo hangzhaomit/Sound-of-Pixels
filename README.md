@@ -64,6 +64,11 @@ The code is developed under the following configurations.
 5. During training, visualizations are saved in HTML format under ```ckpt/MODEL_ID/visualization/```.
 
 ## Evaluation
+0. (Optional) Download our trained model weights for evaluation.
+```bash
+./scripts/download_trained_model.sh
+```
+
 1. Evaluate the trained model performance.
 ```bash
 ./scripts/eval_MUSIC.sh
