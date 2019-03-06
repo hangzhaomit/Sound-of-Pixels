@@ -539,10 +539,10 @@ if __name__ == '__main__':
         args.id += '-{}mix'.format(args.num_mix)
         if args.log_freq:
             args.id += '-LogFreq'
-        args.id += '-#{}-{}-{}#'.format(
+        args.id += '-{}-{}-{}'.format(
             args.arch_frame, args.arch_sound, args.arch_synthesizer)
         args.id += '-frames{}stride{}'.format(args.num_frames, args.stride_frames)
-        args.id += '-' + str(args.img_pool)
+        args.id += '-{}'.format(args.img_pool)
         if args.binary_mask:
             assert args.loss == 'bce', 'Binary Mask should go with BCE loss'
             args.id += '-binary'
@@ -550,8 +550,8 @@ if __name__ == '__main__':
             args.id += '-ratio'
         if args.weighted_loss:
             args.id += '-weightedLoss'
-        args.id += '-channels' + str(args.num_channels)
-        args.id += '-epoch' + str(args.num_epoch)
+        args.id += '-channels{}'.format(args.num_channels)
+        args.id += '-epoch{}'.format(args.num_epoch)
         args.id += '-step' + '_'.join([str(x) for x in args.lr_steps])
 
     print('Model ID: {}'.format(args.id))
