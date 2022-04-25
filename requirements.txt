@@ -1,0 +1,11 @@
+librosa==0.7.2
+matplotlib
+mir_eval==0.5
+numpy==1.15.4
+Pillow==5.4.1
+scipy==1.2.3
+torch==1.11.0
+torchaudio==0.11.0
+torchvision==0.2.2
+numba==0.48
+opencv-python==4.0.0.21
